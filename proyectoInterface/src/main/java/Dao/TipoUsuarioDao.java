@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
  *
@@ -149,8 +150,10 @@ public class TipoUsuarioDao implements DaoTableInterface<TipoUsuarioBean>, DaoVi
     }
 
     @Override
-    public ArrayList<TipoUsuarioBean> getpage(int intRegsPerPag, int intPage) throws Exception {
-        strSQL += SqlBuilder.buildSqlLimit(this.getcount(), intRegsPerPag, intPage);
+    public ArrayList<TipoUsuarioBean> getpage(int intRegsPerPag, int intPage, LinkedHashMap<String, String> hmOrder) throws Exception {
+        String strSQL1 = strSQL;
+        strSQL1 += SqlBuilder.buildSqlOrder(hmOrder);
+        strSQL1 += SqlBuilder.buildSqlLimit(this.getcount(), intRegsPerPag, intPage);
         ArrayList<TipoUsuarioBean> aloBean = new ArrayList<>();
         PreparedStatement oPreparedStatement = null;
         ResultSet oResultSet = null;

@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
  *
@@ -231,8 +232,10 @@ public class UsuarioDao implements DaoTableInterface<UsuarioBean>, DaoViewInterf
      * @throws Exception
      */
     @Override
-    public ArrayList<UsuarioBean> getpage(int intRegsPerPag, int intPage) throws Exception {
-        strSQL += SqlBuilder.buildSqlLimit(this.getcount(), intRegsPerPag, intPage);
+    public ArrayList<UsuarioBean> getpage(int intRegsPerPag, int intPage, LinkedHashMap<String,String> hmOrder) throws Exception {
+        String strSQL1 = strSQL;
+        strSQL1 += SqlBuilder.buildSqlOrder(hmOrder);
+        strSQL1 += SqlBuilder.buildSqlLimit(this.getcount(), intRegsPerPag, intPage);
         ArrayList<UsuarioBean> aloBean = new ArrayList<>();
         PreparedStatement oPreparedStatement = null;
         ResultSet oResultSet = null;

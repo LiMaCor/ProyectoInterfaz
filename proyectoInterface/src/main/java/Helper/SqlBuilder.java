@@ -1,6 +1,8 @@
 package Helper;
 
 import static java.lang.Math.ceil;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  *
@@ -8,7 +10,8 @@ import static java.lang.Math.ceil;
  */
 
 public class SqlBuilder {
-     public static String buildSqlLimit(Long intRegistrosTotales, Integer intRegistrosPorPagina,
+     
+    public static String buildSqlLimit(Long intRegistrosTotales, Integer intRegistrosPorPagina,
              Integer intNumeroPagina) {
         String SQLLimit = "";
         if (intRegistrosPorPagina > 0 && intRegistrosPorPagina < 10000) {
@@ -18,4 +21,19 @@ public class SqlBuilder {
         }
         return SQLLimit;
     }
+     
+     public static String buildSqlOrder(LinkedHashMap<String, String> hmOrder) {
+        String strSQLOrder = "";
+        if (hmOrder != null) {
+            for (Map.Entry<String, String> entry : hmOrder.entrySet()) {
+                strSQLOrder += entry.getKey();
+                strSQLOrder += " ";
+                strSQLOrder += entry.getValue();
+                strSQLOrder += ",";                
+            }
+            strSQLOrder = " ORDER BY " + strSQLOrder.substring(0, strSQLOrder.length() - 1);
+        }
+        return strSQLOrder;
+    }
+     
 }

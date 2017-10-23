@@ -7,10 +7,12 @@ import Connection.BoneCPImpl;
 import Dao.PedidoDao;
 import Dao.TipoUsuarioDao;
 import Helper.AppConfigurationHelper;
+import Helper.ParameterCook;
 import Static.Log4jStatic;
 import com.google.gson.Gson;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -143,13 +145,15 @@ public class TipoUsuarioService implements ViewServiceInterface, EmptyServiceInt
     public ReplyBean getpage() throws Exception {
         int numeroPaginas = Integer.parseInt(oRequest.getParameter("np"));
         int registrosPorPagina = Integer.parseInt(oRequest.getParameter("rpp"));
+        String strOrder = oRequest.getParameter("order");
+        LinkedHashMap<String, String> hmOrder = ParameterCook.getOrderParams(strOrder);
         Connection oConnection = null;
         ReplyBean oReplyBean = null;
         ArrayList<TipoUsuarioBean> aloBean = null;
         try {
             oConnection = AppConfigurationHelper.getSourceConnection().newConnection();
             TipoUsuarioDao oDao = new TipoUsuarioDao(oConnection);
-            aloBean = oDao.getpage(registrosPorPagina, numeroPaginas);
+            aloBean = oDao.getpage(registrosPorPagina, numeroPaginas, hmOrder);
             Gson oGson = new Gson();
             String strJson = oGson.toJson(aloBean);
             oReplyBean = new ReplyBean(200, strJson);

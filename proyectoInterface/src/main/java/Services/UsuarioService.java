@@ -7,10 +7,12 @@ import Connection.HikariCPImpl;
 import Connection.JdbcImpl;
 import Dao.UsuarioDao;
 import Helper.AppConfigurationHelper;
+import Helper.ParameterCook;
 import Static.Log4jStatic;
 import com.google.gson.Gson;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -199,13 +201,15 @@ public class UsuarioService implements ViewServiceInterface, EmptyServiceInterfa
         if (this.checkPermission("getpage")) {
             int numeroPaginas = Integer.parseInt(oRequest.getParameter("np"));
             int registrosPorPagina = Integer.parseInt(oRequest.getParameter("rpp"));
+            String strOrder = oRequest.getParameter("order");
+            LinkedHashMap<String, String> hmOrder = ParameterCook.getOrderParams(strOrder);
             Connection oConnection = null;
             ReplyBean oReplyBean = null;
             ArrayList<UsuarioBean> aloBean = null;
             try {
                 oConnection = AppConfigurationHelper.getSourceConnection().newConnection();
                 UsuarioDao oDao = new UsuarioDao(oConnection);
-                aloBean = oDao.getpage(registrosPorPagina, numeroPaginas);
+                aloBean = oDao.getpage(registrosPorPagina, numeroPaginas, hmOrder);
                 Gson oGson = new Gson();
                 String strJson = oGson.toJson(aloBean);
                 oReplyBean = new ReplyBean(200, strJson);
