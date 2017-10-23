@@ -31,7 +31,7 @@ public class SqlBuilder {
                 strSQLOrder += entry.getValue();
                 strSQLOrder += ",";                
             }
-            strSQLOrder = " ORDER BY " + strSQLOrder.substring(0, strSQLOrder.length() - 1);
+            strSQLOrder = "ORDER BY " + strSQLOrder.substring(0, strSQLOrder.length() - 1);
         }
         return strSQLOrder;
     }

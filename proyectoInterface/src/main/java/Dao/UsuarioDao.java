@@ -41,6 +41,7 @@ public class UsuarioDao implements DaoTableInterface<UsuarioBean>, DaoViewInterf
     public UsuarioBean get(UsuarioBean oBean, int intExpand) throws Exception {
         PreparedStatement oPreparedStatement = null;
         ResultSet oResultSet = null;
+        strSQL = "select * from " + strTable + " WHERE 1=1 ";
         strSQL += " AND id=" + oBean.getId();
         try {
             oPreparedStatement = oConnection.prepareStatement(strSQL);
@@ -232,7 +233,7 @@ public class UsuarioDao implements DaoTableInterface<UsuarioBean>, DaoViewInterf
      * @throws Exception
      */
     @Override
-    public ArrayList<UsuarioBean> getpage(int intRegsPerPag, int intPage, LinkedHashMap<String,String> hmOrder) throws Exception {
+    public ArrayList<UsuarioBean> getpage(int intRegsPerPag, int intPage, LinkedHashMap<String, String> hmOrder) throws Exception {
         String strSQL1 = strSQL;
         strSQL1 += SqlBuilder.buildSqlOrder(hmOrder);
         strSQL1 += SqlBuilder.buildSqlLimit(this.getcount(), intRegsPerPag, intPage);
@@ -240,13 +241,10 @@ public class UsuarioDao implements DaoTableInterface<UsuarioBean>, DaoViewInterf
         PreparedStatement oPreparedStatement = null;
         ResultSet oResultSet = null;
         try {
-            oPreparedStatement = oConnection.prepareStatement(strSQL);
-            oResultSet = oPreparedStatement.executeQuery(strSQL);
+            oPreparedStatement = oConnection.prepareStatement(strSQL1);
+            oResultSet = oPreparedStatement.executeQuery(strSQL1);
             while (oResultSet.next()) {
-                UsuarioBean oBean = new UsuarioBean();
-                oBean.setId(oResultSet.getInt("id"));
-                oBean = this.get(oBean, AppConfigurationHelper.getJsonMsgDepth());
-                aloBean.add(oBean);
+                aloBean.add(this.get(new UsuarioBean(oResultSet.getInt("id")), AppConfigurationHelper.getJsonMsgDepth()));
                 //aloBean.add(this.get(new UsuarioBean(oResultSet.getInt("id"))));
             }
         } catch (Exception ex) {
