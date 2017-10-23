@@ -1,0 +1,79 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 26-sep-2017, 16:18:01
+    Author     : Kysuke
+*/
+h1,h3,h4{
+    text-align: center;
+}
+body {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #eee;
+}
+
+.table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+table {
+    text-align: center;
+    background-color: lightskyblue;
+    border-spacing: 0;
+    border-collapse: collapse;
+    font-size:1em;
+    text-align: center;
+    border: 2px solid black;
+}
+th{
+    border: solid black;
+    text-align: center;
+    background-size: auto 100%; 
+    padding:0.2em;
+}
+
+td{
+    border: 2px solid black;
+    padding: 0.4em;
+}
+.btn-block {
+    display: block;
+    text-align: left;
+    margin: 0px auto;
+}
+
+.btn-lg, .btn-group-lg > .btn {
+    padding: 10px 5px;
+    font-size: 12px;
+    line-height: 1.3333333;
+    border-radius: 6px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+.form-control {
+    display: block;
+    width: 50%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 0px auto;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+form{
+    margin-bottom: 5px;
+}
