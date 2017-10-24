@@ -3,6 +3,7 @@ package Dao;
 import Beans.ProductoBean;
 import Helper.AppConfigurationHelper;
 import Helper.EncodingUtilHelper;
+import Helper.FilterBeanHelper;
 import Helper.SqlBuilder;
 import Static.Log4jStatic;
 import java.sql.Connection;
@@ -157,8 +158,9 @@ public class ProductoDao implements DaoTableInterface<ProductoBean>, DaoViewInte
     }
 
     @Override
-    public ArrayList<ProductoBean> getpage(int intRegsPerPag, int intPage, LinkedHashMap<String, String> hmOrder) throws Exception {
+    public ArrayList<ProductoBean> getpage(int intRegsPerPag, int intPage, LinkedHashMap<String, String> hmOrder, ArrayList<FilterBeanHelper> alFilter) throws Exception {
         String strSQL1 = strSQL;
+        strSQL1 += SqlBuilder.buildSqlFilter(alFilter);
         strSQL1 += SqlBuilder.buildSqlOrder(hmOrder);
         strSQL1 += SqlBuilder.buildSqlLimit(this.getcount(), intRegsPerPag, intPage);
         ArrayList<ProductoBean> aloBean = new ArrayList<>();

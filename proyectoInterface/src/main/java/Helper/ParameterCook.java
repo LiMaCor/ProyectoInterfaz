@@ -1,5 +1,6 @@
 package Helper;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import javax.servlet.http.HttpServletRequest;
 
@@ -39,6 +40,25 @@ public class ParameterCook {
             oHMOrder = null;
         }
         return oHMOrder;
+    }
+
+    public static ArrayList<FilterBeanHelper> getFilterParams(String strFilter) {
+        ArrayList<FilterBeanHelper> oFilterBean = new ArrayList<>();
+        if (strFilter != null && strFilter.length() > 0) {
+            String[] arrFilterSplit1 = strFilter.split(" ");
+            for (String s : arrFilterSplit1) {
+                String[] arrFilterSplit2 = s.split(",");
+                if (arrFilterSplit2.length == 4) {
+                    FilterBeanHelper oFilterBeanHelper = new FilterBeanHelper();
+                    oFilterBeanHelper.setLink(arrFilterSplit2[0]);
+                    oFilterBeanHelper.setField(arrFilterSplit2[1]);
+                    oFilterBeanHelper.setOperation(arrFilterSplit2[2]);
+                    oFilterBeanHelper.setValue(arrFilterSplit2[3]);
+                    oFilterBean.add(oFilterBeanHelper);
+                }
+            }
+        }
+        return oFilterBean;
     }
 
 }

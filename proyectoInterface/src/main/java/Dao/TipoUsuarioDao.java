@@ -4,6 +4,7 @@ import Beans.ProductoBean;
 import Beans.TipoUsuarioBean;
 import Helper.AppConfigurationHelper;
 import Helper.EncodingUtilHelper;
+import Helper.FilterBeanHelper;
 import Helper.SqlBuilder;
 import Static.Log4jStatic;
 import java.sql.Connection;
@@ -150,8 +151,9 @@ public class TipoUsuarioDao implements DaoTableInterface<TipoUsuarioBean>, DaoVi
     }
 
     @Override
-    public ArrayList<TipoUsuarioBean> getpage(int intRegsPerPag, int intPage, LinkedHashMap<String, String> hmOrder) throws Exception {
+    public ArrayList<TipoUsuarioBean> getpage(int intRegsPerPag, int intPage, LinkedHashMap<String, String> hmOrder, ArrayList<FilterBeanHelper> alFilter) throws Exception {
         String strSQL1 = strSQL;
+        strSQL1 += SqlBuilder.buildSqlFilter(alFilter);
         strSQL1 += SqlBuilder.buildSqlOrder(hmOrder);
         strSQL1 += SqlBuilder.buildSqlLimit(this.getcount(), intRegsPerPag, intPage);
         ArrayList<TipoUsuarioBean> aloBean = new ArrayList<>();

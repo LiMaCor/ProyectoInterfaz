@@ -7,6 +7,7 @@ import Connection.HikariCPImpl;
 import Connection.JdbcImpl;
 import Dao.UsuarioDao;
 import Helper.AppConfigurationHelper;
+import Helper.FilterBeanHelper;
 import Helper.ParameterCook;
 import Static.Log4jStatic;
 import com.google.gson.Gson;
@@ -202,14 +203,16 @@ public class UsuarioService implements ViewServiceInterface, EmptyServiceInterfa
             int numeroPaginas = Integer.parseInt(oRequest.getParameter("np"));
             int registrosPorPagina = Integer.parseInt(oRequest.getParameter("rpp"));
             String strOrder = oRequest.getParameter("order");
+            String strFilter = oRequest.getParameter("filter");
             LinkedHashMap<String, String> hmOrder = ParameterCook.getOrderParams(strOrder);
+            ArrayList<FilterBeanHelper> alFilter = ParameterCook.getFilterParams(strFilter);
             Connection oConnection = null;
             ReplyBean oReplyBean = null;
             ArrayList<UsuarioBean> aloBean = null;
             try {
                 oConnection = AppConfigurationHelper.getSourceConnection().newConnection();
                 UsuarioDao oDao = new UsuarioDao(oConnection);
-                aloBean = oDao.getpage(registrosPorPagina, numeroPaginas, hmOrder);
+                aloBean = oDao.getpage(registrosPorPagina, numeroPaginas, hmOrder, alFilter);
                 Gson oGson = new Gson();
                 String strJson = oGson.toJson(aloBean);
                 oReplyBean = new ReplyBean(200, strJson);

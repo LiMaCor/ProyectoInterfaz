@@ -5,6 +5,7 @@ import Beans.ReplyBean;
 import Connection.BoneCPImpl;
 import Dao.ProductoDao;
 import Helper.AppConfigurationHelper;
+import Helper.FilterBeanHelper;
 import Helper.ParameterCook;
 import Static.Log4jStatic;
 import com.google.gson.Gson;
@@ -143,14 +144,16 @@ public class ProductoService implements EmptyServiceInterface, ViewServiceInterf
         int np = Integer.parseInt(oRequest.getParameter("np"));
         int rpp = Integer.parseInt(oRequest.getParameter("rpp"));
         String strOrder = oRequest.getParameter("order");
+        String strFilter = oRequest.getParameter("filter");
         LinkedHashMap<String, String> hmOrder = ParameterCook.getOrderParams(strOrder);
+        ArrayList<FilterBeanHelper> alFilter = ParameterCook.getFilterParams(strFilter);
         Connection oConnection = null;
         ReplyBean oReplyBean = null;
         ArrayList<ProductoBean> aloBean = null;
         try {
             oConnection = AppConfigurationHelper.getSourceConnection().newConnection();
             ProductoDao oDao = new ProductoDao(oConnection);
-            aloBean = oDao.getpage(rpp, np, hmOrder);
+            aloBean = oDao.getpage(rpp, np, hmOrder, alFilter);
             Gson oGson = new Gson();
             String strJson = oGson.toJson(aloBean);
             oReplyBean = new ReplyBean(200, strJson);

@@ -4,6 +4,7 @@ import Beans.TipoUsuarioBean;
 import Beans.UsuarioBean;
 import Helper.AppConfigurationHelper;
 import Helper.EncodingUtilHelper;
+import Helper.FilterBeanHelper;
 import Helper.SqlBuilder;
 import Static.Log4jStatic;
 import java.sql.Connection;
@@ -233,8 +234,9 @@ public class UsuarioDao implements DaoTableInterface<UsuarioBean>, DaoViewInterf
      * @throws Exception
      */
     @Override
-    public ArrayList<UsuarioBean> getpage(int intRegsPerPag, int intPage, LinkedHashMap<String, String> hmOrder) throws Exception {
+    public ArrayList<UsuarioBean> getpage(int intRegsPerPag, int intPage, LinkedHashMap<String, String> hmOrder, ArrayList<FilterBeanHelper> alFilter) throws Exception {
         String strSQL1 = strSQL;
+        strSQL1 += SqlBuilder.buildSqlFilter(alFilter);
         strSQL1 += SqlBuilder.buildSqlOrder(hmOrder);
         strSQL1 += SqlBuilder.buildSqlLimit(this.getcount(), intRegsPerPag, intPage);
         ArrayList<UsuarioBean> aloBean = new ArrayList<>();
@@ -266,7 +268,7 @@ public class UsuarioDao implements DaoTableInterface<UsuarioBean>, DaoViewInterf
 
         PreparedStatement oPreparedStatement = null;
         ResultSet oResultSet = null;
-        strSQL = "SELECT * FROM " + strTable + " WHERE 1=1 ";
+        strSQL = "SELECT * FROM " + strTable + " WHERE 1=1";
         strSQL += " AND login='" + oUsuarioBean.getLogin() + "'";
         strSQL += " AND pass='" + oUsuarioBean.getPass() + "'";
 
