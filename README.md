@@ -7,10 +7,10 @@
 
   El proyecto se compone de las siguientes capas (en orden descencente):
 
-	* Base de Datos
-	* Capa DAO
-	* Capa Service
-	* Controlador
+  * Base de Datos
+  * Capa DAO
+  * Capa Service
+  * Controlador
 
 	
   En el directorio de cada capa se describen las funciones de la
