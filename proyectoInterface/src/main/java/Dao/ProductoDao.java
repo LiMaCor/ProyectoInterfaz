@@ -129,10 +129,11 @@ public class ProductoDao implements DaoTableInterface<ProductoBean>, DaoViewInte
     }
 
     @Override
-    public Long getcount() throws Exception {
+    public Long getcount(ArrayList<FilterBeanHelper> alFilter) throws Exception {
         PreparedStatement oPreparedStatement = null;
         ResultSet oResultSet = null;
         strSQL = "SELECT COUNT(*) FROM " + strTable;
+        strSQL += " WHERE 1=1 " + SqlBuilder.buildSqlFilter(alFilter);
         Long iResult = 0L;
         try {
             oPreparedStatement = oConnection.prepareStatement(strSQL);
@@ -162,7 +163,7 @@ public class ProductoDao implements DaoTableInterface<ProductoBean>, DaoViewInte
         String strSQL1 = strSQL;
         strSQL1 += SqlBuilder.buildSqlFilter(alFilter);
         strSQL1 += SqlBuilder.buildSqlOrder(hmOrder);
-        strSQL1 += SqlBuilder.buildSqlLimit(this.getcount(), intRegsPerPag, intPage);
+        strSQL1 += SqlBuilder.buildSqlLimit(this.getcount(alFilter), intRegsPerPag, intPage);
         ArrayList<ProductoBean> aloBean = new ArrayList<>();
         PreparedStatement oPreparedStatement = null;
         ResultSet oResultSet = null;

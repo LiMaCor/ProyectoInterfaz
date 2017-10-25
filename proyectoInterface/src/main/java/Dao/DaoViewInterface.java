@@ -11,7 +11,7 @@ import java.util.LinkedHashMap;
  */
 public interface DaoViewInterface<GenericBeanImplementation> {
 
-    public Long getcount() throws Exception;
+    public Long getcount(ArrayList<FilterBeanHelper> alFilter) throws Exception;
 
     public ArrayList<GenericBeanImplementation> getpage(int intRegsPerPag, int intPage, LinkedHashMap<String, String> hmOrder, ArrayList<FilterBeanHelper> alFilter) throws Exception;
 

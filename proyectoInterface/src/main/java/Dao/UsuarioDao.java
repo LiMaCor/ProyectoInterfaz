@@ -195,11 +195,12 @@ public class UsuarioDao implements DaoTableInterface<UsuarioBean>, DaoViewInterf
      * @throws Exception
      */
     @Override
-    public Long getcount() throws Exception {
+    public Long getcount(ArrayList<FilterBeanHelper> alFilter) throws Exception {
         Long iResult = 0L;
         PreparedStatement oPreparedStatement = null;
         ResultSet oResultSet = null;
         strSQL = "SELECT COUNT(*) FROM " + strTable;
+        strSQL += " WHERE 1=1 " + SqlBuilder.buildSqlFilter(alFilter);
 
         try {
             oPreparedStatement = oConnection.prepareStatement(strSQL);
@@ -238,7 +239,7 @@ public class UsuarioDao implements DaoTableInterface<UsuarioBean>, DaoViewInterf
         String strSQL1 = strSQL;
         strSQL1 += SqlBuilder.buildSqlFilter(alFilter);
         strSQL1 += SqlBuilder.buildSqlOrder(hmOrder);
-        strSQL1 += SqlBuilder.buildSqlLimit(this.getcount(), intRegsPerPag, intPage);
+        strSQL1 += SqlBuilder.buildSqlLimit(this.getcount(alFilter), intRegsPerPag, intPage);
         ArrayList<UsuarioBean> aloBean = new ArrayList<>();
         PreparedStatement oPreparedStatement = null;
         ResultSet oResultSet = null;
@@ -304,6 +305,65 @@ public class UsuarioDao implements DaoTableInterface<UsuarioBean>, DaoViewInterf
         }
         return oUsuarioBean;
 
+    }
+
+    public Long getCountxtipousuario(int id_tipousuario) throws Exception {
+        PreparedStatement oPreparedStatement = null;
+        ResultSet oResultSet = null;
+        strSQL = "SELECT COUNT(*) FROM " + strTable;
+        strSQL += " WHERE tipousuario_id=" + id_tipousuario;
+        Long iResult = 0L;
+        try {
+            oPreparedStatement = oConnection.prepareStatement(strSQL);
+            oResultSet = oPreparedStatement.executeQuery(strSQL);
+            if (oResultSet.next()) {
+                iResult = oResultSet.getLong("COUNT(*)");
+            } else {
+                throw new Exception("UsuarioDao getCount error");
+            }
+        } catch (Exception ex) {
+            String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName();
+            Log4jStatic.errorLog(msg, ex);
+            throw new Exception(msg, ex);
+        } finally {
+            if (oResultSet != null) {
+                oResultSet.close();
+            }
+            if (oPreparedStatement != null) {
+                oPreparedStatement.close();
+            }
+        }
+        return iResult;
+    }
+
+    public ArrayList<UsuarioBean> getPagextipousuario(int intRegsPerPag, int intPage, LinkedHashMap<String, String> hmOrder, ArrayList<FilterBeanHelper> alFilter, int id_tipousuario) throws Exception {
+        String strSQL1 = strSQL;
+        strSQL1 += " and tipousuario_id=" + id_tipousuario + " ";
+        strSQL1 += SqlBuilder.buildSqlFilter(alFilter);
+        strSQL1 += SqlBuilder.buildSqlOrder(hmOrder);
+        strSQL1 += SqlBuilder.buildSqlLimit(this.getcount(alFilter), intRegsPerPag, intPage);
+        ArrayList<UsuarioBean> aloBean = new ArrayList<>();
+        PreparedStatement oPreparedStatement = null;
+        ResultSet oResultSet = null;
+        try {
+            oPreparedStatement = oConnection.prepareStatement(strSQL1);
+            oResultSet = oPreparedStatement.executeQuery(strSQL1);
+            while (oResultSet.next()) {
+                aloBean.add(this.get(new UsuarioBean(oResultSet.getInt("id")), AppConfigurationHelper.getJsonMsgDepth()));
+            }
+        } catch (Exception ex) {
+            String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName();
+            Log4jStatic.errorLog(msg, ex);
+            throw new Exception(msg, ex);
+        } finally {
+            if (oResultSet != null) {
+                oResultSet.close();
+            }
+            if (oPreparedStatement != null) {
+                oPreparedStatement.close();
+            }
+        }
+        return aloBean;
     }
 
 }

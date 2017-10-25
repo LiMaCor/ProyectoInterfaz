@@ -5,6 +5,7 @@ import Connection.ConnectionInterface;
 import Helper.AppConfigurationHelper;
 import Helper.EstadoHelper;
 import Helper.EstadoHelper.Tipo_estado;
+import Helper.MappingHelper;
 import static Helper.ParameterCook.prepareCamelCaseObject;
 import Services.ViewServiceInterface;
 import Static.Log4jStatic;
@@ -109,10 +110,11 @@ public class json extends HttpServlet {
                 response.setHeader("Access-Control-Allow-Headers", "Origin, Accept, x-requested-with, Content-Type");
 
                 try {
-                    String strClassName = "Services." + ob + "Service";
-                    ViewServiceInterface oService = (ViewServiceInterface) Class.forName(strClassName).getDeclaredConstructor(HttpServletRequest.class).newInstance(request);
-                    Method oMethodService = oService.getClass().getMethod(op);
-                    oReplyBean = (ReplyBean) oMethodService.invoke(oService);
+//                    String strClassName = "Services." + ob + "Service";
+//                    ViewServiceInterface oService = (ViewServiceInterface) Class.forName(strClassName).getDeclaredConstructor(HttpServletRequest.class).newInstance(request);
+//                    Method oMethodService = oService.getClass().getMethod(op);
+//                    oReplyBean = (ReplyBean) oMethodService.invoke(oService);
+                    oReplyBean = (ReplyBean) MappingHelper.executeMethodService(request);
                 } catch (Exception ex) {
                     if (EstadoHelper.getTipo_estado() == Tipo_estado.Debug) {
                         out.println(ex);

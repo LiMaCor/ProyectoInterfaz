@@ -117,10 +117,12 @@ public class ProductoService implements EmptyServiceInterface, ViewServiceInterf
         Long lResult;
         Connection oConnection = null;
         ReplyBean oReplyBean = null;
+        String strFilter = oRequest.getParameter("filter");
+        ArrayList<FilterBeanHelper> alFilter = ParameterCook.getFilterParams(strFilter);
         try {
             oConnection = AppConfigurationHelper.getSourceConnection().newConnection();
             ProductoDao oDao = new ProductoDao(oConnection);
-            lResult = oDao.getcount();
+            lResult = oDao.getcount(alFilter);
             Gson oGson = new Gson();
             String strJson = oGson.toJson(lResult);
             oReplyBean = new ReplyBean(200, strJson);

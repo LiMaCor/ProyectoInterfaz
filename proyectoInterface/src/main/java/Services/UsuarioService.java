@@ -3,6 +3,7 @@ package Services;
 import Beans.ReplyBean;
 import Beans.UsuarioBean;
 import Connection.BoneCPImpl;
+import Connection.ConnectionInterface;
 import Connection.HikariCPImpl;
 import Connection.JdbcImpl;
 import Dao.UsuarioDao;
@@ -166,10 +167,12 @@ public class UsuarioService implements ViewServiceInterface, EmptyServiceInterfa
             Long lResult;
             Connection oConnection = null;
             ReplyBean oReplyBean = null;
+            String strFilter = oRequest.getParameter("filter");
+            ArrayList<FilterBeanHelper> alFilter = ParameterCook.getFilterParams(strFilter);
             try {
                 oConnection = AppConfigurationHelper.getSourceConnection().newConnection();
                 UsuarioDao oDao = new UsuarioDao(oConnection);
-                lResult = oDao.getcount();
+                lResult = oDao.getcount(alFilter);
                 Gson oGson = new Gson();
                 String strJson = oGson.toJson(lResult);
                 oReplyBean = new ReplyBean(200, strJson);
@@ -289,6 +292,78 @@ public class UsuarioService implements ViewServiceInterface, EmptyServiceInterfa
         }
 
         return oReplyBean;
+    }
+
+    public ReplyBean getpagextipousuario() throws Exception {
+        if (this.checkPermission("getpage")) {
+            int np = Integer.parseInt(oRequest.getParameter("np"));
+            int rpp = Integer.parseInt(oRequest.getParameter("rpp"));
+            int id = Integer.parseInt(oRequest.getParameter("id"));
+            String strOrder = oRequest.getParameter("order");
+            String strFilter = oRequest.getParameter("filter");
+            LinkedHashMap<String, String> hmOrder = ParameterCook.getOrderParams(strOrder);
+            ArrayList<FilterBeanHelper> alFilter = ParameterCook.getFilterParams(strFilter);
+            Connection oConnection = null;
+            ConnectionInterface oPooledConnection = null;
+            ReplyBean oReplyBean = null;
+            ArrayList<UsuarioBean> aloBean = null;
+            try {
+                oPooledConnection = AppConfigurationHelper.getSourceConnection();
+                oConnection = oPooledConnection.newConnection();
+                UsuarioDao oDao = new UsuarioDao(oConnection);
+                aloBean = oDao.getPagextipousuario(rpp, np, hmOrder, alFilter, id);
+                Gson oGson = AppConfigurationHelper.getGson();
+                String strJson = oGson.toJson(aloBean);
+                oReplyBean = new ReplyBean(200, strJson);
+            } catch (Exception ex) {
+                String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName();
+                Log4jStatic.errorLog(msg, ex);
+                throw new Exception(msg, ex);
+            } finally {
+                if (oConnection != null) {
+                    oConnection.close();
+                }
+                if (oPooledConnection != null) {
+                    oPooledConnection.disposeConnection();
+                }
+            }
+            return oReplyBean;
+        } else {
+            return new ReplyBean(401, "Unauthorized");
+        }
+    }
+
+    public ReplyBean getcountxtiposuario() throws Exception {
+        if (this.checkPermission("getcount")) {
+            Long lResult;
+            Connection oConnection = null;
+            ConnectionInterface oPooledConnection = null;
+            ReplyBean oReplyBean = null;
+            int id = Integer.parseInt(oRequest.getParameter("id"));
+            try {
+                oPooledConnection = AppConfigurationHelper.getSourceConnection();
+                oConnection = oPooledConnection.newConnection();
+                UsuarioDao oDao = new UsuarioDao(oConnection);
+                lResult = oDao.getCountxtipousuario(id);
+                Gson oGson = AppConfigurationHelper.getGson();
+                String strJson = oGson.toJson(lResult);
+                oReplyBean = new ReplyBean(200, strJson);
+            } catch (Exception ex) {
+                String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName();
+                Log4jStatic.errorLog(msg, ex);
+                throw new Exception(msg, ex);
+            } finally {
+                if (oConnection != null) {
+                    oConnection.close();
+                }
+                if (oPooledConnection != null) {
+                    oPooledConnection.disposeConnection();
+                }
+            }
+            return oReplyBean;
+        } else {
+            return new ReplyBean(401, "Unauthorized");
+        }
     }
 
 }

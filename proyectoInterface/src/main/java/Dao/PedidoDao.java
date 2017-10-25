@@ -133,10 +133,11 @@ public class PedidoDao implements DaoTableInterface<PedidoBean>, DaoViewInterfac
     }
 
     @Override
-    public Long getcount() throws Exception {
+    public Long getcount(ArrayList<FilterBeanHelper> alFilter) throws Exception {
         PreparedStatement oPreparedStatement = null;
         ResultSet oResultSet = null;
         strSQL = "SELECT COUNT(*) FROM " + strTable;
+        strSQL += " WHERE 1=1 " + SqlBuilder.buildSqlFilter(alFilter);
         Long iResult = 0L;
         try {
             oPreparedStatement = oConnection.prepareStatement(strSQL);
@@ -166,7 +167,7 @@ public class PedidoDao implements DaoTableInterface<PedidoBean>, DaoViewInterfac
         String strSQL1 = strSQL;
         strSQL1 += SqlBuilder.buildSqlFilter(alFilter);
         strSQL1 += SqlBuilder.buildSqlOrder(hmOrder);
-        strSQL1 += SqlBuilder.buildSqlLimit(this.getcount(), intRegsPerPag, intPage);
+        strSQL1 += SqlBuilder.buildSqlLimit(this.getcount(alFilter), intRegsPerPag, intPage);
         ArrayList<PedidoBean> aloBean = new ArrayList<>();
         PreparedStatement oPreparedStatement = null;
         ResultSet oResultSet = null;

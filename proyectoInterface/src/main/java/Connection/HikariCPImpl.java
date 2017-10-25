@@ -1,5 +1,6 @@
 package Connection;
 
+import Helper.ConnectionClassHelper;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import java.sql.Connection;
@@ -19,9 +20,9 @@ public class HikariCPImpl implements ConnectionInterface {
 
         Connection c = null;
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:mysql://192.168.122.26:3306/usuariodb");
-        config.setUsername("root");
-        config.setPassword("admin");
+        config.setJdbcUrl(ConnectionClassHelper.getConnectionChain());
+        config.setUsername(ConnectionClassHelper.getDatabaseLogin());
+        config.setPassword(ConnectionClassHelper.getDatabasePassword());
 
         connectionPool = new HikariDataSource(config);
 

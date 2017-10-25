@@ -5,6 +5,7 @@ package Connection;
  * @author Julian
  */
 
+import Helper.ConnectionClassHelper;
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
 import java.sql.Connection;
@@ -18,9 +19,9 @@ public class BoneCPImpl implements ConnectionInterface {
     public Connection newConnection() {
         Connection c = null;
         BoneCPConfig config = new BoneCPConfig();
-        config.setJdbcUrl("jdbc:mysql://192.168.122.26:3306/usuariodb");
-        config.setUsername("root");
-        config.setPassword("admin");
+        config.setJdbcUrl(ConnectionClassHelper.getConnectionChain());
+        config.setUsername(ConnectionClassHelper.getDatabaseLogin());
+        config.setPassword(ConnectionClassHelper.getDatabasePassword());
         config.setMinConnectionsPerPartition(1);
         config.setMaxConnectionsPerPartition(3);
         config.setPartitionCount(1);

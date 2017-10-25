@@ -1,5 +1,6 @@
 package Connection;
 
+import Helper.ConnectionClassHelper;
 import java.sql.Connection;
 import java.sql.SQLException;
 import org.apache.commons.dbcp.BasicDataSource;
@@ -17,10 +18,9 @@ public class DbcpImpl implements ConnectionInterface {
     public Connection newConnection() throws Exception {
         Connection con = null;
         basicDataSource = new BasicDataSource();
-        basicDataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        basicDataSource.setUsername("root");
-        basicDataSource.setPassword("admin");
-        basicDataSource.setUrl("jdbc:mysql://192.168.122.26:3306/usuariodb");
+        basicDataSource.setUsername(ConnectionClassHelper.getDatabaseLogin());
+        basicDataSource.setPassword(ConnectionClassHelper.getDatabasePassword());
+        basicDataSource.setUrl(ConnectionClassHelper.getConnectionChain());
 
 
         return con;
